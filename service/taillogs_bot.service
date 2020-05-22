@@ -1,0 +1,14 @@
+[Unit]
+Description=TailLogs Telegram Bot Service
+After=multi-user.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/bots/tail-bot-telegram/
+ExecStart=/usr/bin/python3 /opt/bots/tail-bot-telegram/tail.py
+StandardInput=tty-force
+Restart=always
+TimeoutStartSec=180
+
+[Install]
+WantedBy=multi-user.target

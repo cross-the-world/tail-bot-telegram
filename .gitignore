@@ -1,0 +1,7 @@
+.idea
+.ipynb_checkpoints
+__pycache__
+./images
+
+config.json
+persistent.json
