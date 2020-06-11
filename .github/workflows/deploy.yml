@@ -1,0 +1,57 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  REPO: ${{ github.repository }}
+  REPO_URL: ${{ github.repositoryUrl }}
+  RUNID: ${{ github.run_id }}
+  RUNNR: ${{ github.run_number }}
+  TARGET: "/opt/dockers/${{github.repository}}"
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Create config.json
+        shell: bash
+        env:
+          CONFIG_JSON: ${{ secrets.CONFIG_JSON }}
+        run: |
+          echo "$REPO, $REPO_URL, $RUNID, $RUNNR, $TARGET" &&
+          mkdir -p ./config &&
+          echo "$CONFIG_JSON" > ./config/config.json
+
+      - name: Copy to DigitalOcean
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          host: ${{ secrets.DC_HOST }}
+          username: ${{ secrets.DC_USER }}
+          port: ${{ secrets.DC_PORT }}
+          privateKey: ${{ secrets.DC_KEY }}
+          local: "."
+          remote: ${{ env.TARGET }}
+
+      - name: Clear config.json
+        shell: bash
+        run: |
+          rm -rf ./config
+
+      - name: Deploy on digitalocean
+        uses: appleboy/ssh-action@master
+        with:
+          HOST: ${{ secrets.DC_HOST }}
+          USERNAME: ${{ secrets.DC_USER }}
+          PORT: ${{ secrets.DC_PORT }}
+          KEY: ${{ secrets.DC_KEY }}
+          envs: CONFIG_JSON, TARGET
+          script: |
+            cd $TARGET &&
+            docker-compose build &&
+            docker-compose rm -f -s &&
+            docker-compose up -d

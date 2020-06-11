@@ -1,0 +1,8 @@
+numpy
+scipy
+matplotlib
+voila
+pandas
+sympy
+nose
+python-telegram-bot

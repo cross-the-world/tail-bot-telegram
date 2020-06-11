@@ -4,12 +4,11 @@ import json
 from Utils import parse_message, split
 from BaseBot import BaseBot, restricted, autoupdate
 
-from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup)
-from telegram.ext import (Updater, CommandHandler, Filters, MessageHandler, ConversationHandler, CallbackQueryHandler)
+from telegram import (InlineKeyboardButton, InlineKeyboardMarkup)
+from telegram.ext import (CommandHandler, ConversationHandler, CallbackQueryHandler)
 
 
-
-def load(p="persistent.json"):
+def load(p=None):
     try:
         with open(p) as f:
             return json.load(f)
@@ -17,7 +16,8 @@ def load(p="persistent.json"):
         print(ex)
         return None
 
-def write(p="persistent.json", verbose=False, chat_id=None, interval=None, path=None, n=0, offset=0):
+
+def write(p=None, verbose=False, chat_id=None, interval=None, path=None, n=0, offset=0):
     try:
         obj = {
             "verbose"  : verbose,
@@ -32,10 +32,10 @@ def write(p="persistent.json", verbose=False, chat_id=None, interval=None, path=
     except Exception as ex:
         print(ex)
 
-# load persistent
-persistent_path = 'persistent.json'
-persistent = load(persistent_path)
 
+# load persistent
+persistent_path = 'persistent/persistent.json'
+persistent = load(persistent_path)
 
 
 class TailBot(BaseBot):

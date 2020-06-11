@@ -8,7 +8,7 @@ import numpy as np
 
 # load config
 config = None
-with open('config.json') as f:
+with open('config/config.json') as f:
     config = json.load(f)
 assert config is not None
 

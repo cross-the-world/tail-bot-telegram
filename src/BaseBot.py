@@ -6,8 +6,8 @@ from Utils import parse_message, sleep, config
 from Thread import BotThreadManager, CountDownLatch
 
 import telegram
-from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup)
-from telegram.ext import (Updater, CommandHandler, Filters, MessageHandler, ConversationHandler, CallbackQueryHandler, BaseFilter)
+from telegram import (ReplyKeyboardRemove)
+from telegram.ext import (Updater, CommandHandler)
 
 
 # call singleton thread

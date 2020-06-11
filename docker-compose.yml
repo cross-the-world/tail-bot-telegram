@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+    binancebot:
+      container_name: tail-log-bot
+      build: .
+      restart: unless-stopped
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /tmp/logs:/var/log
+        - ${PWD}/config:/opt/app/config
+        - ${PWD}/persistent:/opt/app/persistent
+      tmpfs:
+        - /tmp
