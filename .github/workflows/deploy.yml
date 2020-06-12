@@ -28,12 +28,12 @@ jobs:
           echo "$CONFIG_JSON" > ./config/config.json
 
       - name: Copy to DigitalOcean
-        uses: garygrossgarten/github-action-scp@release
+        uses: cross-the-world/scp-pipeline@master
         with:
           host: ${{ secrets.DC_HOST }}
-          username: ${{ secrets.DC_USER }}
+          user: ${{ secrets.DC_USER }}
           port: ${{ secrets.DC_PORT }}
-          privateKey: ${{ secrets.DC_KEY }}
+          key: ${{ secrets.DC_KEY }}
           local: "."
           remote: ${{ env.TARGET }}
 
@@ -43,13 +43,12 @@ jobs:
           rm -rf ./config
 
       - name: Deploy on digitalocean
-        uses: appleboy/ssh-action@master
+        uses: cross-the-world/ssh-pipeline@master
         with:
-          HOST: ${{ secrets.DC_HOST }}
-          USERNAME: ${{ secrets.DC_USER }}
-          PORT: ${{ secrets.DC_PORT }}
-          KEY: ${{ secrets.DC_KEY }}
-          envs: CONFIG_JSON, TARGET
+          host: ${{ secrets.DC_HOST }}
+          user: ${{ secrets.DC_USER }}
+          port: ${{ secrets.DC_PORT }}
+          key: ${{ secrets.DC_KEY }}
           script: |
             cd $TARGET &&
             docker-compose build &&
